@@ -1,5 +1,7 @@
 //current city need: Name (current date), nl temp, nl wind, then humidity, finally uv index
 //5-day forecast: next day date, weather icon, temp, wind, humidity.. then x4 for 4 next days.
+const baseURL = 'https://api.openweathermap.org';
+const apiKey = 'a1c50c2bb53e239b0e195a3c619382ec';
 var userFormEl = document.querySelector("#user-form");
 var searchHistoryEl = document.querySelector("#search-history");
 var cityInputEl = document.querySelector("#city");
@@ -20,7 +22,7 @@ var formSubmitHandler = function(event) {
   var city = cityInputEl.value.trim();
 
   if (city) {
-    getWeather(city);
+    getWeatherGeo(city);
 
     // clear old content
     weatherContainerEl.textContent = "";
@@ -36,9 +38,9 @@ var buttonCityHistory = function(event) {
 };
 
 //api call function
-var getWeather = function(city) {
+var getWeatherGeo = function(city) {
   // format the github api url
-  var apiUrl = 'https://api.openweathermap.org/data/2.5/weather?q=' + city + '&appid=3fed7a6ebcb4e1b063e09df15c8e9e7c&units=imperial';
+  var apiUrl = 'https://api.openweathermap.org/geo/1.0/direct?q=' + city + '&limit=5&appid=' + apiKey;
   // make a request to the url
   fetch(apiUrl).then(function(response) {
     // request was successful
@@ -53,9 +55,27 @@ var getWeather = function(city) {
       alert("Error: " + response.statusText);
     }
   })
-  .catch(function(error) {
-    alert("Unable to connect");
-  });
+  getWeatherData()
+};
+
+//api call function
+var getWeatherData = function(city) {
+  // format the github api url
+  var apiUrl = 'api.openweathermap.org/data/2.5/weather?q=Cleveland,Ohio&appid=a1c50c2bb53e239b0e195a3c619382ec&units=imperial';
+  // make a request to the url
+  fetch(apiUrl).then(function(response) {
+    // request was successful
+    if (response.ok) {
+      console.log(response);
+      response.json().then(function(data) {
+      console.log(data);
+      displayCurrentWeather(data, city);
+      displayCurrentWeather(data, city);
+      });
+    } else {
+      alert("Error: " + response.statusText);
+    }
+  })
 };
 
 var displayCurrentWeather = function(city) {
@@ -71,6 +91,7 @@ var displayCurrentWeather = function(city) {
 
     // create the city weather container
     var cityEl = document.createElement("li");
+    cityEl.textContent = "hi"
     cityEl.classList = "list-item flex-row justify-space-between align-center";
     //WRITE IN HERE MUST INCLUDE Name (current date), nl temp, nl wind, then humidity, finally uv index
     // append to container
@@ -94,7 +115,7 @@ var displayFiveDayForecast = function(city) {
     cityEl.classList = "list-item flex-row justify-space-between align-center";
     //WRITE IN HERE MUST INCLUDE Name next day date, weather icon, temp, wind, humidity.. then x4 for 4 next days.
     // append to container
-    cityEl.appendChild(weatherContainerEl);
+    cityEl.appendChild(fiveDayEl);
   };
 };
 
