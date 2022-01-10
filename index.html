@@ -12,10 +12,8 @@
 
 <body class="flex-column min-100-vh">
   <header class="hero"> <!--top weather dashboard part, not done styling yet-->
-    <h1 class=""> Weather Dashboard</h1>
+    <h1 class="app-title"> Weather Dashboard</h1>
   </header>
-
-<!--fix everything below here so that it works the same as git it done-->
 
   <main class="flex-row justify-space-between"> <!--search for city + city history div-->
     <div class="col-12 col-md-4">
@@ -29,18 +27,18 @@
       </div>
   
         <div class="card">
-          <h3 class="card-header text-uppercase">Search By Topic</h3>
-          <div id="language-buttons" class="card-body">
-            <button data-language="javascript" class="btn">JavaScript</button>
-            <button data-language="html" class="btn">HTML</button>
-            <button data-language="css" class="btn">CSS</button>
+          <h3 class="card-header text-uppercase">Search history</h3>
+          <div id="search-history" class="card-body">
+            
           </div>
         </div>
       </div>
   
       <div class="col-12 col-md-8">
-        <h2 class="subtitle">Showing Repositories for: <span id="repo-search-term"></span></h2>
-        <div id="repos-container" class="list-group">
+        <div id="weather-container" class="current-city">
+  
+        </div>
+        <div id="five-day" class="forecast">
   
         </div>
       </div>
