@@ -1,28 +1,71 @@
 //current city need: Name (current date), nl temp, nl wind, then humidity, finally uv index
 //5-day forecast: next day date, weather icon, temp, wind, humidity.. then x4 for 4 next days.
+
+//ALL DOMS
 const baseURL = 'https://api.openweathermap.org';
 const apiKey = 'a1c50c2bb53e239b0e195a3c619382ec';
 var userFormEl = document.querySelector("#user-form");
 var searchHistoryEl = document.querySelector("#search-history");
 var cityInputEl = document.querySelector("#city");
 var weatherContainerEl = document.querySelector("#weather-container");
-var fiveDayEl = document.querySelector("#five-day");
-var dayOneEl = document.querySelector("#day-one");
-var dayTwoEl = document.querySelector("#day-two");
-var dayThreeEl = document.querySelector("#day-three");
-var dayFourEl = document.querySelector("#day-four");
-var dayFiveEl = document.querySelector("#day-five");
+var cityName = document.querySelector("#city-name");
+var tempEl = document.querySelector("#temp");
+var windEl = document.querySelector("#wind");
+var humidityEl = document.querySelector("#humidity");
+var uvEl = document.querySelector("#uv");
+var weatherIcon = document.querySelector("#weather-icon");
+//day 1 forecast elements
+var dateOneEl = document.querySelector("#date1");
+var iconOne = document.querySelector("#icon1")
+var tempOneEl = document.querySelector("#temp1");
+var windOneEl = document.querySelector("#wind1");
+var humidityOneEl = document.querySelector("#humidity1");
+//day 2 forecast elements
+var dateTwoEl = document.querySelector("#date2");
+var iconTwo = document.querySelector("#icon2")
+var tempTwoEl = document.querySelector("#temp2");
+var windTwoEl = document.querySelector("#wind2");
+var humidityTwoEl = document.querySelector("#humidity2");
+//day 3 forecast elements
+var dateThreeEl = document.querySelector("#date3");
+var iconThree = document.querySelector("#icon3")
+var tempThreeEl = document.querySelector("#temp3");
+var windThreeEl = document.querySelector("#wind3");
+var humidityThreeEl = document.querySelector("#humidity3");
+//day 4 forecast elements
+var dateFourEl = document.querySelector("#date4");
+var iconFour = document.querySelector("#icon4")
+var tempFourEl = document.querySelector("#temp4");
+var windFourEl = document.querySelector("#wind4");
+var humidityFourEl = document.querySelector("#humidity4");
+//day 5 forecast elements
+var dateFiveEl = document.querySelector("#date5");
+var iconFive = document.querySelector("#icon5")
+var tempFiveEl = document.querySelector("#temp5");
+var windFiveEl = document.querySelector("#wind5");
+var humidityFiveEl = document.querySelector("#humidity5");
+
+//Load cities that have been searched before
+$(document).ready(function () {
+  getCity();
+});
 
 //input city form function
 var formSubmitHandler = function(event) {
-  // prevent page from refreshing
   event.preventDefault();
-
   // get value from input element
   var city = cityInputEl.value.trim();
 
   if (city) {
     getWeatherGeo(city);
+    getWeatherData(city);
+
+    saveCity(city);
+
+    cityName.textContent = '';
+    cityInputEl.value = '';
+
+    reset();
 
     // clear old content
     weatherContainerEl.textContent = "";
@@ -33,8 +76,32 @@ var formSubmitHandler = function(event) {
   }
 };
 
-var buttonCityHistory = function(event) {
-
+var reset = function() {
+  dateOneEl.textContent = '';
+  iconOne.textContent = '';
+  tempOneEl.textContent = '';
+  windOneEl.textContent = '';
+  humidityOneEl.textContent = '';
+  dateTwoEl.textContent = '';
+  iconTwo.textContent = '';
+  tempTwoEl.textContent = '';
+  windTwoEl.textContent = '';
+  humidityTwoEl.textContent = '';
+  dateThreeEl.textContent = '';
+  iconThree.textContent = '';
+  tempThreeEl.textContent = '';
+  windThreeEl.textContent = '';
+  humidityThreeEl.textContent = '';
+  dateFourEl.textContent = '';
+  iconFour.textContent = '';
+  tempFourEl.textContent = '';
+  windFourEl.textContent = '';
+  humidityFourEl.textContent = '';
+  dateFiveEl.textContent = '';
+  iconFive.textContent = '';
+  tempFiveEl.textContent = '';
+  windFiveEl.textContent = '';
+  humidityFiveEl.textContent = '';
 };
 
 //api call function
@@ -55,7 +122,6 @@ var getWeatherGeo = function(city) {
       alert("Error: " + response.statusText);
     }
   })
-  getWeatherData()
 };
 
 //api call function
