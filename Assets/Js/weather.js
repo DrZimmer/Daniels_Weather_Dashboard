@@ -45,36 +45,12 @@ var tempFiveEl = document.querySelector("#temp5");
 var windFiveEl = document.querySelector("#wind5");
 var humidityFiveEl = document.querySelector("#humidity5");
 
+//BREAK HERE INTO FUNCTIONS
+
 //Load cities that have been searched before
 $(document).ready(function () {
   getCity();
 });
-
-//input city form function
-var formSubmitHandler = function(event) {
-  event.preventDefault();
-  // get value from input element
-  var city = cityInputEl.value.trim();
-
-  if (city) {
-    getWeatherGeo(city);
-    getWeatherData(city);
-
-    saveCity(city);
-
-    cityName.textContent = '';
-    cityInputEl.value = '';
-
-    reset();
-
-    // clear old content
-    weatherContainerEl.textContent = "";
-    fiveDayEl.textContent = "";
-    cityInputEl.value = "";
-  } else {
-    alert("Please enter a City");
-  }
-};
 
 var reset = function() {
   dateOneEl.textContent = '';
@@ -104,7 +80,33 @@ var reset = function() {
   humidityFiveEl.textContent = '';
 };
 
-//api call function
+//input city form function
+var formSubmitHandler = function(event) {
+  event.preventDefault();
+  // get value from input element
+  var city = cityInputEl.value.trim();
+
+  if (city) {
+    getWeatherGeo(city);
+    getWeatherData(city);
+    //might need to include another function here for 5 day forecast
+
+    saveCity(city);
+
+    // clear old content
+    cityName.textContent = '';
+    cityInputEl.value = '';
+    weatherContainerEl.textContent = "";
+
+    reset();
+
+  } else {
+    alert("Please enter a City");
+  }
+};
+
+
+//api geo call function
 var getWeatherGeo = function(city) {
   // format the github api url
   var apiUrl = 'https://api.openweathermap.org/geo/1.0/direct?q=' + city + '&limit=5&appid=' + apiKey;
@@ -116,7 +118,6 @@ var getWeatherGeo = function(city) {
       response.json().then(function(data) {
       console.log(data);
       displayCurrentWeather(data, city);
-      displayCurrentWeather(data, city);
       });
     } else {
       alert("Error: " + response.statusText);
@@ -124,18 +125,17 @@ var getWeatherGeo = function(city) {
   })
 };
 
-//api call function
+//api data call function
 var getWeatherData = function(city) {
   // format the github api url
-  var apiUrl = 'api.openweathermap.org/data/2.5/weather?q=Cleveland,Ohio&appid=a1c50c2bb53e239b0e195a3c619382ec&units=imperial';
+  var apiUrl2 = 'https://api.openweathermap.org/data/2.5/weather?q=' + city + '&appid=' + apiKey + '&units=imperial';
   // make a request to the url
-  fetch(apiUrl).then(function(response) {
+  fetch(apiUrl2).then(function(response) {
     // request was successful
     if (response.ok) {
       console.log(response);
       response.json().then(function(data) {
       console.log(data);
-      displayCurrentWeather(data, city);
       displayCurrentWeather(data, city);
       });
     } else {
@@ -165,6 +165,18 @@ var displayCurrentWeather = function(city) {
   };
 };
 
+var fiveDayForecast = function(city) {
+  var forecastAPI =
+    "https://api.openweathermap.org/data/2.5/forecast?q=" +
+    city +
+    "&appid=a1c50c2bb53e239b0e195a3c619382ec&units=imperial&";
+  fetch(forecastAPI).then(function (response) {
+    response.json().then(function (data) {
+      displayFiveDayForecast(data, city);
+    });
+  });
+};
+
 var displayFiveDayForecast = function(city) {
   // check if api returned any cities
   if (city.length === 0) {
@@ -187,4 +199,3 @@ var displayFiveDayForecast = function(city) {
 
 // add event listeners to form and button container
 userFormEl.addEventListener("submit", formSubmitHandler);
-searchHistoryEl.addEventListener("click", buttonCityHistory);
