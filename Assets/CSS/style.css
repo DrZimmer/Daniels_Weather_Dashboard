@@ -158,8 +158,12 @@ main {
   border-radius: var(--border-radius);
 }
 
-.forecast {
-  display: flex;
+.five-day-forecast {
+  margin: 5px;
+  padding: 10px 15px;
+  background-color: var(--secondary);
+  color: var(--primary);
+  border-radius: 7px;
 }
 
 /* HEIGHT / WIDTH UTILS */
