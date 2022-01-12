@@ -8,7 +8,7 @@ var userFormEl = document.querySelector("#user-form");
 var searchHistoryEl = document.querySelector("#search-history");
 var cityInputEl = document.querySelector("#city");
 var weatherContainerEl = document.querySelector("#weather-container");
-var cityName = document.querySelector("#city-name");
+var cityNameEl = document.querySelector("#city-name");
 var tempEl = document.querySelector("#temp");
 var windEl = document.querySelector("#wind");
 var humidityEl = document.querySelector("#humidity");
@@ -94,7 +94,7 @@ var formSubmitHandler = function(event) {
     saveCity(city);
 
     // clear old content
-    cityName.textContent = '';
+    cityNameEl.textContent = '';
     cityInputEl.value = '';
     weatherContainerEl.textContent = "";
 
@@ -144,12 +144,17 @@ var getWeatherData = function(city) {
   })
 };
 
-var displayCurrentWeather = function(city) {
+var displayCurrentWeather = function(weather, city) {
+  cityNameEl.textContent = '';
   // check if api returned any cities
   if (city.length === 0) {
     weatherContainerEl.textContent = "No Cities found.";
     return;
   }
+  // City name
+  var nameOfCity = document.createElement("h3");
+  nameOfCity.textContent = weather.name;
+  cityNameEl.appendChild(nameOfCity);
   // loop over Cities
   for (var i = 0; i < city.length; i++) {
     // format City name
