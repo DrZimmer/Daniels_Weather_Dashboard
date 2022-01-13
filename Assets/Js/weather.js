@@ -93,9 +93,9 @@ var formSubmitHandler = function(event) {
     saveCity(city);
 
     // clear old content
-    cityNameEl.textContent = '';
-    cityInputEl.value = '';
-    weatherContainerEl.textContent = "";
+    // dashboard.textContent = '';
+    // cityInputEl.value = '';
+    // weatherContainerEl.textContent = "";
 
     reset();
 
@@ -107,7 +107,7 @@ var formSubmitHandler = function(event) {
 
 //api geo call function
 var getWeatherGeo = function(city) {
-  // format the github api url
+  // format the weather api url
   var apiUrl = 'https://api.openweathermap.org/geo/1.0/direct?q=' + city + '&limit=5&appid=' + apiKey;
   // make a request to the url
   fetch(apiUrl).then(function(response) {
@@ -115,49 +115,59 @@ var getWeatherGeo = function(city) {
     if (response.ok) {
       console.log(response);
       response.json().then(function(data) {
-      console.log(data);
+      console.table(data);
+      let lat = data[0].lat;
+      let lon = data[0].lon;
+      let cityName = data[0].name;
+      getWeatherData(lat, lon, cityName);
       });
-      //api data call function
-      getWeatherData = function(city) {
-        var lat = weather.coord.lat;
-        var lon = weather.coord.lon;
-        // format the api url
-        var apiUrl2 =
-        "https://api.openweathermap.org/data/2.5/weather?q=" + lat + "&lon=" + lon + "&appid=" + apiKey + "&units=imperial";
-        // make a request to the url
-        fetch(apiUrl2).then(function(response) {
-          // request was successful
-          if (response.ok) {
-            console.log(response);
-            response.json().then(function(data) {
-            console.log(data);
-            displayCurrentWeather(data, city);
-            });
-          } else {
-            alert("Error: " + response.statusText);
-          }
-        })
-      };
     } else {
       alert("Error: " + response.statusText);
     }
   })
 };
 
+//api data call function
+getWeatherData = function(lat, lon, cityName) {
+  // var lat = weather.coord.lat; not using this anymore
+  // var lon = weather.coord.lon;
+  // format the api url
+  var apiUrl2 =
+  "https://api.openweathermap.org/data/2.5/onecall?lat=" + lat + "&lon=" + lon + "&appid=" + apiKey + "&units=imperial&limit=5";
+  // make a request to the url
+  fetch(apiUrl2).then(function(response) {
+    // request was successful
+    if (response.ok) {
+      console.log(response);
+      response.json().then(function(data) {
+      console.log(data);
+      displayCurrentWeather(data, cityName);
+      });
+    } else {
+      alert("Error: " + response.statusText);
+    }
+  })
+};
 
 var displayCurrentWeather = function(weather, city) {
   //WRITE IN HERE MUST INCLUDE Name (current date), nl temp, nl wind, then humidity, finally uv index
-  cityNameEl.textContent = '';
+  // cityNameEl.textContent = '';
+  let dashboard = document.querySelector(".dashboard");
   // check if api returned any cities
   if (city.length === 0) {
     weatherContainerEl.textContent = "No Cities found.";
     return;
   }
   // City name
-  var nameOfCity = document.createElement("h3");
-  nameOfCity.textContent = "hi";
-  cityNameEl.appendChild(nameOfCity);
-
+  var cityDisplay = document.createElement("p");
+  var imageDisplay = document.createElement("img");
+  var tempDisplay = document.createElement("p");
+  var humidityDisplay = document.createElement("p");
+  var UVDisplay = document.createElement("p");
+  cityDisplay.textContent = city;
+  imageDisplay.setAttribute("src", `https://openweathermap.org/img/wn/${weather.current.weather[0].icon}.png`);
+  dashboard.append(cityDisplay, imageDisplay);
+  displayFiveDayForecast(weather.daily);
   // //Date
   // let unixTimestamp = weather.dt;
   // var newDate = new Date(unixTimestamp * 1000);
@@ -203,25 +213,26 @@ var displayCurrentWeather = function(weather, city) {
 // })});
 };
 
-var fiveDayForecast = function(city) {
-  var forecastAPI =
-    "https://api.openweathermap.org/data/2.5/forecast?q=" +
-    city +
-    "&appid=a1c50c2bb53e239b0e195a3c619382ec&units=imperial&";
-  fetch(forecastAPI).then(function (response) {
-    response.json().then(function (data) {
-      displayFiveDayForecast(data, city);
-    });
-  });
-};
+// var fiveDayForecast = function(weather) { DONT NEED ANYMORE
+//   var forecastAPI =
+//     "https://api.openweathermap.org/data/2.5/forecast?q=" +
+//     city +
+//     "&appid=a1c50c2bb53e239b0e195a3c619382ec&units=imperial&";
+//   fetch(forecastAPI).then(function (response) {
+//     response.json().then(function (data) {
+//       displayFiveDayForecast(data, city);
+//     });
+//   });
+// };
 
 var displayFiveDayForecast = function(weather, city) {
-  reset();
+  // reset();
   // check if api returned any cities
-  if (city.length === 0) {
-    fiveDayEl.textContent = "No Cities found.";
-    return;
-  }
+  // if (city.length === 0) {
+  //   fiveDayEl.textContent = "No Cities found.";
+  //   return;
+  //
+  console.log('displayFiveDayForecast' + weather)
   //Date Day One
   let unixTimestamp = weather.list[8].dt;
   var newDate = new Date(unixTimestamp * 1000);
