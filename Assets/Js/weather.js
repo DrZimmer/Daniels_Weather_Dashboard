@@ -148,25 +148,37 @@ getWeatherData = function(lat, lon, cityName) {
   })
 };
 
-var displayCurrentWeather = function(weather, city) {
+var displayCurrentWeather = function(weather, cityName) {
   //WRITE IN HERE MUST INCLUDE Name (current date), nl temp, nl wind, then humidity, finally uv index
-  // cityNameEl.textContent = '';
   let dashboard = document.querySelector(".dashboard");
   dashboard.textContent = '';
-  // check if api returned any cities
-  if (city.length === 0) {
-    weatherContainerEl.textContent = "No Cities found.";
-    return;
-  }
-  // City name
+  let temp = weather.current.temp;
+  let humidity = weather.current.humidity;
+  let windSpeed = weather.current.wind_speed;
+  let uvi = weather.current.uvi;
+  
+  // display all 
   var cityDisplay = document.createElement("p");
   var imageDisplay = document.createElement("img");
   var tempDisplay = document.createElement("p");
   var humidityDisplay = document.createElement("p");
-  var UVDisplay = document.createElement("p");
-  cityDisplay.textContent = city;
+  var windSpeedDisplay = document.createElement("p");
+  var uVDisplay = document.createElement("p");
+  cityDisplay.textContent = cityName;
   imageDisplay.setAttribute("src", `https://openweathermap.org/img/wn/${weather.current.weather[0].icon}.png`);
-  dashboard.append(cityDisplay, imageDisplay);
+  tempDisplay.textContent = "Current Temperature: " + temp + '\u00B0F';
+  humidityDisplay.textContent = "Current Humidity: " + Math.floor(humidity) + ' %';
+  windSpeedDisplay.textContent = "Current Wind Speed: " + Math.floor(windSpeed) + ' mph';
+  uVDisplay.textContent = uvi;
+
+  // if (uvi.value < 4) {
+  //   UVDisplay.setAttribute("class", "badge bg-success");
+  // } else if (uvi.value < 8 && uvi.value > 4) {
+  //   UVDisplay.setAttribute("class", "badge bg-warning");
+  // } else {
+  //   UVDisplay.setAttribute("class", "badge bg-danger");
+  // }
+  dashboard.append(cityDisplay, imageDisplay, tempDisplay, humidityDisplay, windSpeedDisplay, uVDisplay);
   displayFiveDayForecast(weather.daily);
   // //Date
   // let unixTimestamp = weather.dt;
@@ -183,29 +195,12 @@ var displayCurrentWeather = function(weather, city) {
 
   // //console.log(newDate);
 
-  // // Weather Icon
-  // weatherIcon.innerHTML = `<img src="http://openweathermap.org/img/wn/${weather.weather[0].icon}@4x.png">`;
-
   // tempEl.textContent = "Temp: " + Math.floor(weather.main.temp) + " \u00B0F";
   // windEl.textContent = "Wind: " + Math.floor(weather.wind.speed) + " mph";
   // humidityEl.textContent =
   //   "Humidity: " + Math.floor(weather.main.humidity) + " %";
 
   // //UV Index
-  
-  //   // "https://api.openweathermap.org/data/2.5/uvi/forecast?lat="
-  // //https://api.openweathermap.org/data/2.5/uvi/forecast?lat=51.5085&lon=-0.1257&appid=HERE&cnt=1
-  // fetch(indexQueryURL).then(function (response) {
-  //   response.json().then(function (data) {
-  //     var indexEl = document.createElement("span");
-
-  //     if (data[0].value < 4) {
-  //       indexEl.setAttribute("class", "badge bg-success");
-  //     } else if (data[0].value < 8) {
-  //       indexEl.setAttribute("class", "badge bg-warning");
-  //     } else {
-  //       indexEl.setAttribute("class", "badge bg-danger");
-  //     }
 
   //     indexEl.innerHTML = data[0].value;
   //     uvEl.innerHTML = "UV Index: ";
