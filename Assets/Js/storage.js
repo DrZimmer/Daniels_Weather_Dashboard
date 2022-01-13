@@ -2,9 +2,17 @@ function saveCity(lat, lon, city) {
   var cities = JSON.parse(window.localStorage.getItem("cities")) || [];
 
   //save to storage
-  let foundCity = cities.find((city) => city.name === city);
+  // let foundCity = cities.find((city) => city.name === city); find might only work for objects
+  let foundCity = false;
+  for(var i=0; i < cities.length; i++) {
+    console.log('cities' + cities[i].name);
+    if(cities[i].name === city) {
+      foundCity = true;
+      break;
+    }
+  };
 
-  if (foundCity != true) {
+  if (!foundCity) {
     //only add it when it is not in storage already
     let newCity = {
       name: city,

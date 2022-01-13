@@ -88,13 +88,7 @@ var formSubmitHandler = function(event) {
 
   if (city) {
     getWeatherGeo(city);
-    //might need to include another function here for 5 day forecast
-
-    // clear old content
-    // dashboard.textContent = '';
-    // cityInputEl.value = '';
-    // weatherContainerEl.textContent = "";
-
+    
     reset();
 
   } else {
@@ -128,8 +122,6 @@ var getWeatherGeo = function(city) {
 
 //api data call function
 getWeatherData = function(lat, lon, cityName) {
-  // var lat = weather.coord.lat; not using this anymore
-  // var lon = weather.coord.lon;
   // format the api url
   var apiUrl2 =
   "https://api.openweathermap.org/data/2.5/onecall?lat=" + lat + "&lon=" + lon + "&appid=" + apiKey + "&units=imperial&limit=5";
@@ -148,28 +140,41 @@ getWeatherData = function(lat, lon, cityName) {
   })
 };
 
-var displayCurrentWeather = function(weather, cityName) {
+var convertUnixtimeToDate = function(unixTime) {
+  // unixTime = 
+  var date = new Date(unixTime * 1000);
+  return date.toLocaleDateString("en-US");
+};
+
+
+var displayCurrentWeather = function(weatherObj, cityName) {
   //WRITE IN HERE MUST INCLUDE Name (current date), nl temp, nl wind, then humidity, finally uv index
   let dashboard = document.querySelector(".dashboard");
   dashboard.textContent = '';
-  let temp = weather.current.temp;
-  let humidity = weather.current.humidity;
-  let windSpeed = weather.current.wind_speed;
-  let uvi = weather.current.uvi;
+  let date = convertUnixtimeToDate(weatherObj.current.dt);
+  let temp = weatherObj.current.temp;
+  let humidity = weatherObj.current.humidity;
+  let windSpeed = weatherObj.current.wind_speed;
+  let uvi = weatherObj.current.uvi;
   
   // display all 
+  let cityDateWeatherDiv = document.createElement('div');
+  cityDateWeatherDiv.setAttribute ('class', 'cityDateWeather');
   var cityDisplay = document.createElement("p");
+  var dateDisplay = document.createElement("p");
+  
   var imageDisplay = document.createElement("img");
   var tempDisplay = document.createElement("p");
   var humidityDisplay = document.createElement("p");
   var windSpeedDisplay = document.createElement("p");
   var uVDisplay = document.createElement("p");
   cityDisplay.textContent = cityName;
-  imageDisplay.setAttribute("src", `https://openweathermap.org/img/wn/${weather.current.weather[0].icon}.png`);
+  dateDisplay.textContent = date;
+  imageDisplay.setAttribute("src", `https://openweathermap.org/img/wn/${weatherObj.current.weather[0].icon}.png`);
   tempDisplay.textContent = "Current Temperature: " + temp + '\u00B0F';
-  humidityDisplay.textContent = "Current Humidity: " + Math.floor(humidity) + ' %';
+  humidityDisplay.textContent = "Current Humidity: " + Math.floor(humidity) + '%';
   windSpeedDisplay.textContent = "Current Wind Speed: " + Math.floor(windSpeed) + ' mph';
-  uVDisplay.textContent = uvi;
+  uVDisplay.textContent = "UV Index: " + uvi;
 
   // if (uvi.value < 4) {
   //   UVDisplay.setAttribute("class", "badge bg-success");
@@ -178,8 +183,9 @@ var displayCurrentWeather = function(weather, cityName) {
   // } else {
   //   UVDisplay.setAttribute("class", "badge bg-danger");
   // }
-  dashboard.append(cityDisplay, imageDisplay, tempDisplay, humidityDisplay, windSpeedDisplay, uVDisplay);
-  displayFiveDayForecast(weather.daily);
+  cityDateWeatherDiv.append(cityDisplay, dateDisplay, imageDisplay);
+  dashboard.append(cityDateWeatherDiv, tempDisplay, humidityDisplay, windSpeedDisplay, uVDisplay);
+  displayFiveDayForecast(weatherObj.daily);
   // //Date
   // let unixTimestamp = weather.dt;
   // var newDate = new Date(unixTimestamp * 1000);
@@ -220,14 +226,20 @@ var displayCurrentWeather = function(weather, cityName) {
 //   });
 // };
 
-var displayFiveDayForecast = function(weather, city) {
-  // reset();
-  // check if api returned any cities
-  // if (city.length === 0) {
-  //   fiveDayEl.textContent = "No Cities found.";
-  //   return;
-  // loop through 
-  console.log('displayFiveDayForecast' + weather)
+var displayFiveDayForecast = function(weatherDailyObj) {
+  let fiveDayForecastEl = document.querySelector("#fiveDayForecast");
+  fiveDayForecastEl.textContent = ""
+  let fiveDayForecastObj = weatherDailyObj.slice(1, 6);
+  for(var i = 0; i < fiveDayForecastObj.length; i++) {
+    let forecastDiv = document.createElement("div");
+    forecastDiv.setAttribute('class', 'col-sm five-day-forecast');
+    let forecastDate = convertUnixtimeToDate(fiveDayForecastObj[i].dt);
+    let forecastDateDisplay = document.createElement('p');
+    forecastDateDisplay.textContent = forecastDate;
+    forecastDiv.append(forecastDateDisplay); // ,forecastTemperatureDisplay, etc
+
+    fiveDayForecastEl.append(forecastDiv);
+  };
 
 
 

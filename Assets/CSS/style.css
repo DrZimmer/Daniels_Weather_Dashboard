@@ -166,6 +166,13 @@ main {
   border-radius: 7px;
 }
 
+.cityDateWeather {
+  flex-direction: row;
+  display: flex;
+  align-items: center;
+  align-content: center;
+}
+
 /* HEIGHT / WIDTH UTILS */
 .min-100-vh {
   min-height: 100vh;
