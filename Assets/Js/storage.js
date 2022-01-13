@@ -1,4 +1,4 @@
-function saveCity(city) {
+function saveCity(lat, lon, city) {
   var cities = JSON.parse(window.localStorage.getItem("cities")) || [];
 
   //save to storage
@@ -8,6 +8,8 @@ function saveCity(city) {
     //only add it when it is not in storage already
     let newCity = {
       name: city,
+      lat: lat,
+      lon: lon,
       dateAdded: new Date(),
     };
     cities.push(newCity);
@@ -29,9 +31,9 @@ function getCity() {
       searchHistoryButton.textContent = getCities[i].name;
       searchHistoryButton.classList = "btn btn-secondary btn-lg btn-block mt-4";
       searchHistoryButton.addEventListener("click", function () {
-        getWeatherGeo(getCities[i].name);
-        getWeatherData(getCities[i].name);
-        fiveDayForecast(getcities[i].name);
+        // getWeatherGeo(getCities[i].name);
+        getWeatherData(getCities[i].lat, getCities[i].lon, getCities[i].name);
+        // fiveDayForecast(getcities[i].name);
       });
       searchHistoryEl.appendChild(searchHistoryButton);
     }

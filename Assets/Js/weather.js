@@ -90,8 +90,6 @@ var formSubmitHandler = function(event) {
     getWeatherGeo(city);
     //might need to include another function here for 5 day forecast
 
-    saveCity(city);
-
     // clear old content
     // dashboard.textContent = '';
     // cityInputEl.value = '';
@@ -120,6 +118,7 @@ var getWeatherGeo = function(city) {
       let lon = data[0].lon;
       let cityName = data[0].name;
       getWeatherData(lat, lon, cityName);
+      saveCity(lat, lon, cityName);
       });
     } else {
       alert("Error: " + response.statusText);
@@ -153,6 +152,7 @@ var displayCurrentWeather = function(weather, city) {
   //WRITE IN HERE MUST INCLUDE Name (current date), nl temp, nl wind, then humidity, finally uv index
   // cityNameEl.textContent = '';
   let dashboard = document.querySelector(".dashboard");
+  dashboard.textContent = '';
   // check if api returned any cities
   if (city.length === 0) {
     weatherContainerEl.textContent = "No Cities found.";
@@ -231,117 +231,120 @@ var displayFiveDayForecast = function(weather, city) {
   // if (city.length === 0) {
   //   fiveDayEl.textContent = "No Cities found.";
   //   return;
-  //
+  // loop through 
   console.log('displayFiveDayForecast' + weather)
-  //Date Day One
-  let unixTimestamp = weather.list[8].dt;
-  var newDate = new Date(unixTimestamp * 1000);
-  var actualDate = document.createElement("p");
-  actualDate.textContent = newDate;
-  dateOneEl.appendChild(actualDate);
 
-  // Icon Day One
-  iconOne.innerHTML = `<img src="http://openweathermap.org/img/wn/${weather.list[8].weather[0].icon}@2x.png">`;
-  //Temp Day One
-  TempOne = document.createElement("p");
-  TempOne.textContent = Math.floor(weather.list[8].main.temp) + " \u00B0F";
-  tempOneEl.appendChild(TempOne);
-  // Wind Day One
-  windOne = document.createElement("p");
-  windOne.textContent = Math.floor(weather.list[8].wind.gust) + " mph";
-  windOneEl.appendChild(windOne);
-  //Humidity Day One
-  humidityOne = document.createElement("p");
-  humidityOne.textContent = Math.floor(weather.list[8].main.humidity) + " %";
-  humidityOneEl.appendChild(humidityOne);
 
-  //FORECAST DAY 2
-  //Date Day 2
-  let unixTimestamp02 = weather.list[16].dt;
-  var newDate2 = new Date(unixTimestamp02 * 1000);
-  var actualDate2 = document.createElement("p");
-  actualDate2.textContent = newDate2;
-  dateTwoEl.appendChild(actualDate2);
-  // Icon Day Two
-  iconTwo.innerHTML = `<img src="http://openweathermap.org/img/wn/${weather.list[16].weather[0].icon}@2x.png">`;
-  //Temp Day 2
-  tempTwo = document.createElement("p");
-  tempTwo.textContent = Math.floor(weather.list[16].main.temp) + " \u00B0F";
-  tempTwoEl.appendChild(tempTwo);
-  // Wind Day 2
-  windTwo = document.createElement("p");
-  windTwo.textContent = Math.floor(weather.list[16].wind.gust) + " mph";
-  windTwoEl.appendChild(windTwo);
-  //Humidity Day 2
-  humidityTwo = document.createElement("p");
-  humidityTwo.textContent = Math.floor(weather.list[16].main.humidity) + " %";
-  humidityTwoEl.appendChild(humidityTwo);
 
-  //FORECAST DAY 3
-  //Date Day 3
-  let unixTimestamp03 = weather.list[24].dt;
-  var newDate3 = new Date(unixTimestamp03 * 1000);
-  var actualDate3 = document.createElement("p");
-  actualDate3.textContent = newDate3;
-  dateThreeEl.appendChild(actualDate3);
-  // Icon Day Three
-  iconThree.innerHTML = `<img src="http://openweathermap.org/img/wn/${weather.list[24].weather[0].icon}@2x.png">`;
-  //Temp Day 3
-  tempThree = document.createElement("p");
-  tempThree.textContent = Math.floor(weather.list[24].main.temp) + " \u00B0F";
-  tempThreeEl.appendChild(tempThree);
-  // Wind Day 3
-  windThree = document.createElement("p");
-  windThree.textContent = Math.floor(weather.list[24].wind.gust) + " mph";
-  windThreeEl.appendChild(windThree);
-  //Humidity Day 3
-  humidityThree = document.createElement("p");
-  humidityThree.textContent = Math.floor(weather.list[24].main.humidity) + " %";
-  humidityThreeEl.appendChild(humidityThree);
+  // //Date Day One
+  // let unixTimestamp = weather.list[8].dt;
+  // var newDate = new Date(unixTimestamp * 1000);
+  // var actualDate = document.createElement("p");
+  // actualDate.textContent = newDate;
+  // dateOneEl.appendChild(actualDate);
 
-  //FORECAST DAY 4
-  //Date Day 4
-  let unixTimestamp04 = weather.list[32].dt;
-  var newDate = new Date(unixTimestamp04 * 1000);
-  var actualDate = document.createElement("p");
-  actualDate.textContent = newDate;
-  dateFourEl.appendChild(actualDate);
-  // Icon Day Four
-  iconFour.innerHTML = `<img src="http://openweathermap.org/img/wn/${weather.list[32].weather[0].icon}@2x.png">`;
-  //Temp Day 4
-  tempFour = document.createElement("p");
-  tempFour.textContent = Math.floor(weather.list[32].main.temp) + " \u00B0F";
-  tempFourEl.appendChild(tempFour);
-  // Wind Day 4
-  windFour = document.createElement("p");
-  windFour.textContent = Math.floor(weather.list[32].wind.gust) + " mph";
-  windFourEl.appendChild(windFour);
-  //Humidity Day 4
-  humidityFour = document.createElement("p");
-  humidityFour.textContent = Math.floor(weather.list[32].main.humidity) + " %";
-  humidityFourEl.appendChild(humidityFour);
+  // // Icon Day One
+  // iconOne.innerHTML = `<img src="http://openweathermap.org/img/wn/${weather.list[8].weather[0].icon}@2x.png">`;
+  // //Temp Day One
+  // TempOne = document.createElement("p");
+  // TempOne.textContent = Math.floor(weather.list[8].main.temp) + " \u00B0F";
+  // tempOneEl.appendChild(TempOne);
+  // // Wind Day One
+  // windOne = document.createElement("p");
+  // windOne.textContent = Math.floor(weather.list[8].wind.gust) + " mph";
+  // windOneEl.appendChild(windOne);
+  // //Humidity Day One
+  // humidityOne = document.createElement("p");
+  // humidityOne.textContent = Math.floor(weather.list[8].main.humidity) + " %";
+  // humidityOneEl.appendChild(humidityOne);
 
-  //FORECAST DAY 5
-  //Date Day 5
-  let unixTimestamp05 = weather.list[39].dt;
-  var newDate = new Date(unixTimestamp05 * 1000);
-  var actualDate = document.createElement("p");
-  actualDate.textContent = newDate;
-  dateFiveEl.appendChild(actualDate);
-  // Icon Day Five
-  iconFive.innerHTML = `<img src="http://openweathermap.org/img/wn/${weather.list[39].weather[0].icon}@2x.png">`;
-  //Temp Day 5
-  tempFive = document.createElement("p");
-  tempFive.textContent = Math.floor(weather.list[39].main.temp) + " \u00B0F";
-  tempFiveEl.appendChild(tempFive);
-  // Wind Day 5
-  windFive = document.createElement("p");
-  windFive.textContent = Math.floor(weather.list[39].wind.gust) + " mph";
-  windFiveEl.appendChild(windFive);
-  //Humidity Day 5
-  humidityFive = document.createElement("p");
-  humidityFive.textContent = Math.floor(weather.list[39].main.humidity) + " %";
-  humidityFiveEl.appendChild(humidityFive);
+  // //FORECAST DAY 2
+  // //Date Day 2
+  // let unixTimestamp02 = weather.list[16].dt;
+  // var newDate2 = new Date(unixTimestamp02 * 1000);
+  // var actualDate2 = document.createElement("p");
+  // actualDate2.textContent = newDate2;
+  // dateTwoEl.appendChild(actualDate2);
+  // // Icon Day Two
+  // iconTwo.innerHTML = `<img src="http://openweathermap.org/img/wn/${weather.list[16].weather[0].icon}@2x.png">`;
+  // //Temp Day 2
+  // tempTwo = document.createElement("p");
+  // tempTwo.textContent = Math.floor(weather.list[16].main.temp) + " \u00B0F";
+  // tempTwoEl.appendChild(tempTwo);
+  // // Wind Day 2
+  // windTwo = document.createElement("p");
+  // windTwo.textContent = Math.floor(weather.list[16].wind.gust) + " mph";
+  // windTwoEl.appendChild(windTwo);
+  // //Humidity Day 2
+  // humidityTwo = document.createElement("p");
+  // humidityTwo.textContent = Math.floor(weather.list[16].main.humidity) + " %";
+  // humidityTwoEl.appendChild(humidityTwo);
+
+  // //FORECAST DAY 3
+  // //Date Day 3
+  // let unixTimestamp03 = weather.list[24].dt;
+  // var newDate3 = new Date(unixTimestamp03 * 1000);
+  // var actualDate3 = document.createElement("p");
+  // actualDate3.textContent = newDate3;
+  // dateThreeEl.appendChild(actualDate3);
+  // // Icon Day Three
+  // iconThree.innerHTML = `<img src="http://openweathermap.org/img/wn/${weather.list[24].weather[0].icon}@2x.png">`;
+  // //Temp Day 3
+  // tempThree = document.createElement("p");
+  // tempThree.textContent = Math.floor(weather.list[24].main.temp) + " \u00B0F";
+  // tempThreeEl.appendChild(tempThree);
+  // // Wind Day 3
+  // windThree = document.createElement("p");
+  // windThree.textContent = Math.floor(weather.list[24].wind.gust) + " mph";
+  // windThreeEl.appendChild(windThree);
+  // //Humidity Day 3
+  // humidityThree = document.createElement("p");
+  // humidityThree.textContent = Math.floor(weather.list[24].main.humidity) + " %";
+  // humidityThreeEl.appendChild(humidityThree);
+
+  // //FORECAST DAY 4
+  // //Date Day 4
+  // let unixTimestamp04 = weather.list[32].dt;
+  // var newDate = new Date(unixTimestamp04 * 1000);
+  // var actualDate = document.createElement("p");
+  // actualDate.textContent = newDate;
+  // dateFourEl.appendChild(actualDate);
+  // // Icon Day Four
+  // iconFour.innerHTML = `<img src="http://openweathermap.org/img/wn/${weather.list[32].weather[0].icon}@2x.png">`;
+  // //Temp Day 4
+  // tempFour = document.createElement("p");
+  // tempFour.textContent = Math.floor(weather.list[32].main.temp) + " \u00B0F";
+  // tempFourEl.appendChild(tempFour);
+  // // Wind Day 4
+  // windFour = document.createElement("p");
+  // windFour.textContent = Math.floor(weather.list[32].wind.gust) + " mph";
+  // windFourEl.appendChild(windFour);
+  // //Humidity Day 4
+  // humidityFour = document.createElement("p");
+  // humidityFour.textContent = Math.floor(weather.list[32].main.humidity) + " %";
+  // humidityFourEl.appendChild(humidityFour);
+
+  // //FORECAST DAY 5
+  // //Date Day 5
+  // let unixTimestamp05 = weather.list[39].dt;
+  // var newDate = new Date(unixTimestamp05 * 1000);
+  // var actualDate = document.createElement("p");
+  // actualDate.textContent = newDate;
+  // dateFiveEl.appendChild(actualDate);
+  // // Icon Day Five
+  // iconFive.innerHTML = `<img src="http://openweathermap.org/img/wn/${weather.list[39].weather[0].icon}@2x.png">`;
+  // //Temp Day 5
+  // tempFive = document.createElement("p");
+  // tempFive.textContent = Math.floor(weather.list[39].main.temp) + " \u00B0F";
+  // tempFiveEl.appendChild(tempFive);
+  // // Wind Day 5
+  // windFive = document.createElement("p");
+  // windFive.textContent = Math.floor(weather.list[39].wind.gust) + " mph";
+  // windFiveEl.appendChild(windFive);
+  // //Humidity Day 5
+  // humidityFive = document.createElement("p");
+  // humidityFive.textContent = Math.floor(weather.list[39].main.humidity) + " %";
+  // humidityFiveEl.appendChild(humidityFive);
     //WRITE IN HERE MUST INCLUDE Name next day date, weather icon, temp, wind, humidity.. then x4 for 4 next days.
 };
 
