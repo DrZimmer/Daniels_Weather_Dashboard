@@ -170,73 +170,56 @@ var displayCurrentWeather = function(weatherObj, cityName) {
   var uVDisplay = document.createElement("p");
   cityDisplay.textContent = cityName;
   dateDisplay.textContent = date;
+  dateDisplay.setAttribute("class", "p-3");
   imageDisplay.setAttribute("src", `https://openweathermap.org/img/wn/${weatherObj.current.weather[0].icon}.png`);
   tempDisplay.textContent = "Current Temperature: " + temp + '\u00B0F';
   humidityDisplay.textContent = "Current Humidity: " + Math.floor(humidity) + '%';
   windSpeedDisplay.textContent = "Current Wind Speed: " + Math.floor(windSpeed) + ' mph';
   uVDisplay.textContent = "UV Index: " + uvi;
 
-  // if (uvi.value < 4) {
-  //   UVDisplay.setAttribute("class", "badge bg-success");
-  // } else if (uvi.value < 8 && uvi.value > 4) {
-  //   UVDisplay.setAttribute("class", "badge bg-warning");
-  // } else {
-  //   UVDisplay.setAttribute("class", "badge bg-danger");
-  // }
+  //style UV Color based on value
+  if (uvi < 4) {
+    uVDisplay.setAttribute("class", "badge bg-success");
+  } else if (uvi < 8 && uvi > 4) {
+    uVDisplay.setAttribute("class", "badge bg-warning");
+  } else {
+    uVDisplay.setAttribute("class", "badge bg-danger");
+  };
+
   cityDateWeatherDiv.append(cityDisplay, dateDisplay, imageDisplay);
   dashboard.append(cityDateWeatherDiv, tempDisplay, humidityDisplay, windSpeedDisplay, uVDisplay);
   displayFiveDayForecast(weatherObj.daily);
-  // //Date
-  // let unixTimestamp = weather.dt;
-  // var newDate = new Date(unixTimestamp * 1000);
-  // var actualDate = document.createElement("h4");
-  // actualDate.textContent = newDate;
-  // cityNameEl.appendChild(actualDate);
-  // // var todaysDate = new Date(weather.dt * 1000);
-  // // var day = todaysDate.getDate();
-  // // var month = todaysDate.getMonth() + 1;
-  // // var year = todaysDate.getFullYear();
-  // // //var Realdate = month + "/" + day + "/" + year;
-  // // cityNameUI.appendChild(month + "/" + day + "/" + year);
-
-  // //console.log(newDate);
-
-  // tempEl.textContent = "Temp: " + Math.floor(weather.main.temp) + " \u00B0F";
-  // windEl.textContent = "Wind: " + Math.floor(weather.wind.speed) + " mph";
-  // humidityEl.textContent =
-  //   "Humidity: " + Math.floor(weather.main.humidity) + " %";
-
-  // //UV Index
-
-  //     indexEl.innerHTML = data[0].value;
-  //     uvEl.innerHTML = "UV Index: ";
-  //     uvEl.append(indexEl);
-// })});
 };
-
-// var fiveDayForecast = function(weather) { DONT NEED ANYMORE
-//   var forecastAPI =
-//     "https://api.openweathermap.org/data/2.5/forecast?q=" +
-//     city +
-//     "&appid=a1c50c2bb53e239b0e195a3c619382ec&units=imperial&";
-//   fetch(forecastAPI).then(function (response) {
-//     response.json().then(function (data) {
-//       displayFiveDayForecast(data, city);
-//     });
-//   });
-// };
 
 var displayFiveDayForecast = function(weatherDailyObj) {
   let fiveDayForecastEl = document.querySelector("#fiveDayForecast");
   fiveDayForecastEl.textContent = ""
   let fiveDayForecastObj = weatherDailyObj.slice(1, 6);
+  console.log('fivedayforecast' + JSON.stringify(fiveDayForecastObj));
   for(var i = 0; i < fiveDayForecastObj.length; i++) {
     let forecastDiv = document.createElement("div");
     forecastDiv.setAttribute('class', 'col-sm five-day-forecast');
     let forecastDate = convertUnixtimeToDate(fiveDayForecastObj[i].dt);
     let forecastDateDisplay = document.createElement('p');
     forecastDateDisplay.textContent = forecastDate;
-    forecastDiv.append(forecastDateDisplay); // ,forecastTemperatureDisplay, etc
+
+    let foreCastIconDisplay = document.createElement('img');
+    foreCastIconDisplay.setAttribute("src", `https://openweathermap.org/img/wn/${fiveDayForecastObj[i].weather[0].icon}.png`);
+    // foreCastIconDisplay.textContent = foreCastIcon;
+
+    let foreCastTemp = fiveDayForecastObj[i].temp.day;
+    let foreCastTempDisplay = document.createElement('p');
+    foreCastTempDisplay.textContent = "Temperature: " + foreCastTemp + '\u00B0F';
+
+    let foreCastWindSpeed = fiveDayForecastObj[i].wind_speed;
+    let foreCastWindSpeedDisplay = document.createElement('p');
+    foreCastWindSpeedDisplay.textContent = "Wind Speed: " + Math.floor(foreCastWindSpeed) + ' mph';
+
+    let foreCastHumidity = fiveDayForecastObj[i].humidity;
+    let foreCastHumidityDisplay = document.createElement('p');
+    foreCastHumidityDisplay.textContent = "Humidity: " + Math.floor(foreCastHumidity) + '%';
+
+    forecastDiv.append(forecastDateDisplay, foreCastIconDisplay, foreCastTempDisplay, foreCastWindSpeedDisplay, foreCastHumidityDisplay);
 
     fiveDayForecastEl.append(forecastDiv);
   };
