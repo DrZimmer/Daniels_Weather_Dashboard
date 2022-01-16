@@ -14,8 +14,8 @@ No code was given for the creation of this dashboard.
 - You can also click on the city in the search history again to bring that city's information back up.
 - Cities will not duplicate on the search history, however as list gets very long you will have to clear local storage.
 
-img here
+![weather_dash](https://user-images.githubusercontent.com/91150259/149643629-88553568-0e7b-4ffa-81e2-aecb46484ddf.png)
 
-#### Link to Application :
+#### Link to Application : https://drzimmer.github.io/Daniels_Weather_Dashboard/
 
 Code created by: Daniel Zimmermann
