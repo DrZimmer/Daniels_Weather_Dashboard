@@ -173,6 +173,11 @@ main {
   align-content: center;
 }
 
+/* city Name size in current day */
+.bigger {
+  font-size: 28px;
+}
+
 /* HEIGHT / WIDTH UTILS */
 .min-100-vh {
   min-height: 100vh;

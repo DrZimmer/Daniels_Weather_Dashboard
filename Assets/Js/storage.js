@@ -2,7 +2,6 @@ function saveCity(lat, lon, city) {
   var cities = JSON.parse(window.localStorage.getItem("cities")) || [];
 
   //save to storage
-  // let foundCity = cities.find((city) => city.name === city); find might only work for objects
   let foundCity = false;
   for(var i=0; i < cities.length; i++) {
     console.log('cities' + cities[i].name);
@@ -39,9 +38,9 @@ function getCity() {
       searchHistoryButton.textContent = getCities[i].name;
       searchHistoryButton.classList = "btn btn-secondary btn-lg btn-block mt-4";
       searchHistoryButton.addEventListener("click", function () {
-        // getWeatherGeo(getCities[i].name);
+        
         getWeatherData(getCities[i].lat, getCities[i].lon, getCities[i].name);
-        // fiveDayForecast(getcities[i].name);
+        
       });
       searchHistoryEl.appendChild(searchHistoryButton);
     }
